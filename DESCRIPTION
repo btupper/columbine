@@ -1,0 +1,18 @@
+Package: columbine
+Title: Data from https://massshootingtracker.site/
+Description: R tools for working with https://massshootingtracker.site/ data.
+Version: 0.1
+Encoding: UTF-8
+Depends:
+    R (>= 4.1)
+Imports:
+  rlang,
+  dplyr,
+  jsonlite,
+  rappdirs,
+  tidygeocoder
+Maintainer: Ben Tupper <btupper@bigelow.org>
+Author: Ben Tupper <btupper@bigelow.org>
+URL: https://github.com/btupper/columbine
+License: MIT + file LICENSE
+RoxygenNote: 7.1.2
