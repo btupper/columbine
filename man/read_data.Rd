@@ -8,7 +8,8 @@ read_data(
   years = seq_years(),
   path = get_path(),
   keep = c("date", "killed", "wounded", "city", "state", "lat", "lon"),
-  form = c("data.frame", "sf")[1]
+  form = c("data.frame", "sf")[1],
+  complete = tolower(form[1]) == "sf"
 )
 }
 \arguments{
@@ -21,6 +22,9 @@ read_data(
 to retrieve all fields.  Not compatible with \code{form = "sf"}.}
 
 \item{form}{character, one of 'data.frame' or 'sf'}
+
+\item{complete}{logical, if TRUE remove records without lon,lat.  Ignored if
+\code{form} is 'sf' in which case only complete cases of lon and lat are permitted.}
 }
 \value{
 data frame, possibly sf POINT table

@@ -28,7 +28,7 @@ geo_code <- function(x){
 #' @param geocode logical if TRUE geocode the locations with lon, lat
 #' @return tibble
 fetch_data <- function(year = current_year(),
-                       save_data = FALSE,
+                       save_data = TRUE,
                        save_path = get_path(),
                        geocode = TRUE){
   
@@ -64,11 +64,14 @@ fetch_data <- function(year = current_year(),
 #'   "date", "killed", "wounded", "city", "state", "lat", "lon".  Specify "all"
 #'   to retrieve all fields.  Not compatible with \code{form = "sf"}.
 #' @param form character, one of 'data.frame' or 'sf'
+#' @param complete logical, if TRUE remove records without lon,lat.  Ignored if
+#'   \code{form} is 'sf' in which case only complete cases of lon and lat are permitted.
 #' @return data frame, possibly sf POINT table
 read_data <- function(years = seq_years(),
                       path = get_path(),
                       keep = c("date", "killed", "wounded", "city", "state", "lat", "lon"),
-                      form = c("data.frame", "sf")[1]){
+                      form = c("data.frame", "sf")[1],
+                      complete = tolower(form[1]) == "sf"){
   
   ff <- list_years(path = path)
   
@@ -82,7 +85,10 @@ read_data <- function(years = seq_years(),
   if (!("all" %in% keep))   x <- dplyr::select(x, dplyr::any_of(keep))
   
   if (!("all" %in% keep) && tolower(form[1]) == 'sf'){
-    x <- sf::st_as_sf(x, coords = c("lon", "lat"), crs = 4326)
+    x <- dplyr::filter(x, !is.na(.data$lon) | !is.na(.data$lat)) |>
+      sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+  } else {
+    if (complete) x <- dplyr::filter(x, !is.na(.data$lon) & !is.na(.data$lat))
   }
   
   x

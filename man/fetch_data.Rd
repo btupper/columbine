@@ -7,7 +7,7 @@ rs as a tibble}
 \usage{
 fetch_data(
   year = current_year(),
-  save_data = FALSE,
+  save_data = TRUE,
   save_path = get_path(),
   geocode = TRUE
 )

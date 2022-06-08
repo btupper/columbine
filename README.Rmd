@@ -1,0 +1,60 @@
+---
+title: "columbine"
+output: github_document
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Access data from [Mass Shooting Trakcer](https://massshootingtracker.site/) from R.
+
+### Requirements
+
+  +[R v4.1+](https://www.r-project.org/)
+  +[rlang](https://CRAN.R-project.org/package=rlang)
+  +[dplyr](https://CRAN.R-project.org/package=dplyr)
+  +[jsonlite](https://CRAN.R-project.org/package=jsonlite)
+  +[rappdirs](https://CRAN.R-project.org/package=rappdirs)
+  +[tidygeocode](https://CRAN.R-project.org/package=tidygeocode)
+  +[sf](https://CRAN.R-project.org/package=sf)
+
+### Installation
+
+```
+remotes::install_github("btupper/columbine")
+```
+
+### Fetching and Geocoding data
+
+Fetching can be done by a single year, or multiple years.  Geocoding takes a bit of time, but once complete reading the files is quite fast.
+
+```{r}
+suppressPackageStartupMessages({
+  library(columbine)
+  library(dplyr)
+  library(leaflet)
+})
+
+# commented out so that it doesn't run repeatedly, uncomment to run
+# xx <- fetch_data(seq(from = 2013, to = current_year(), by = 1))
+```
+
+### Read in the data
+
+```{r}
+x <- read_data(form = "sf")
+x
+```
+
+### Quickly plot the data
+
+```{r}
+total_shot <- x$killed + x$wounded
+range_shot <- range(total_shot, na.rm = TRUE)
+sz <- ((total_shot - range_shot[1])/(range_shot[2] - range_shot[1]) + 1) * 5
+leaflet(data = x) |>
+  addTiles() |>
+  addCircleMarkers(radius = sz, clusterOptions = markerClusterOptions())
+```
