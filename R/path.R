@@ -1,3 +1,12 @@
+#' Retrieve a listing of available files
+#' 
+#' @export
+#' @param path character the data path
+#' @return character vector of zero or more files
+list_years <- function(path = get_path()){
+  list.files(path, full.names = TRUE)
+}
+
 #' Construct a path to locally stored data 
 #' 
 #' @export
@@ -36,44 +45,8 @@ current_year <- function(){
 #' @param start integer, the first year in the sequence
 #' @param end the last year in the sequence
 #' @return integer sequence of years
-years <- function(start = 2013, end = current_year()){
+seq_years <- function(start = 2013, end = current_year()){
   seq(from = start[1], to = end[1])
 }
 
 
-#' Fetch the data for one or more yea
-#' rs as a tibble
-#' 
-#' @export
-#' @param year integer one or more years 2013-present
-#' @param save_data logical, if TRUE, then save the data
-#' @param save_path character the path to save to
-#' @param geocode logical if TRUE geocode the locations with lon, lat
-#' @return tibble
-fetch_data <- function(year = current_year(),
-                       save_data = FALSE,
-                       savepath = ".",
-                       geocode = TRUE){
-  
-  urls <- get_data_url(year)
-  names(urls) <- year
-  
-  lapply(names(urls),
-    function(nm){
-      x <- jsonlite::fromJSON(urls[nm]) |>
-        dplyr::as_tibble() |>
-        dplyr::mutate(date = as.Date(.data$date),
-                      killed = as.numeric(.data$killed),
-                      wounded = as.numeric(.data$wounded))
-      if (geocode){
-        x <- tidygeocoder::geocode(x, city =city, state = state, method = 'osm') |>
-          dplyr::rename(lon = "long")
-      }
-      if (save_data){
-        filename = file.path(save_path[1], sprintf("mass-shootings-%s.rds", nm))
-        saveRDS(x, filename)
-      }
-      x
-    }) |>
-    dplyr::bind_rows() 
-}

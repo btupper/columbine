@@ -10,7 +10,8 @@ Imports:
   dplyr,
   jsonlite,
   rappdirs,
-  tidygeocoder
+  tidygeocoder,
+  sf
 Maintainer: Ben Tupper <btupper@bigelow.org>
 Author: Ben Tupper <btupper@bigelow.org>
 URL: https://github.com/btupper/columbine
