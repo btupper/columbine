@@ -11,9 +11,11 @@ Imports:
   jsonlite,
   rappdirs,
   tidygeocoder,
-  sf
+  sf,
+  leaflet,
+  RColorBrewer
 Maintainer: Ben Tupper <btupper@bigelow.org>
 Author: Ben Tupper <btupper@bigelow.org>
 URL: https://github.com/btupper/columbine
 License: MIT + file LICENSE
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1

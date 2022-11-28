@@ -8,7 +8,7 @@ always_allow_html: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Access data from [Mass Shooting Trakcer](https://massshootingtracker.site/) from R.
+Access data from [Mass Shooting Tracker](https://massshootingtracker.site/) from R.
 
 ### Requirements
 
@@ -35,16 +35,19 @@ suppressPackageStartupMessages({
   library(columbine)
   library(dplyr)
   library(leaflet)
+  library(sf)
+  library(cartogram)
+  library(USAboundaries)
 })
 
 # commented out so that it doesn't run repeatedly, uncomment to run
-# xx <- fetch_data(seq(from = 2013, to = current_year(), by = 1))
+# xx <- fetch_mst(seq(from = 2013, to = current_year(), by = 1))
 ```
 
 ### Read in the data
 
 ```{r}
-x <- read_data(form = "sf")
+x <- read_mst(form = "sf")
 x
 ```
 
